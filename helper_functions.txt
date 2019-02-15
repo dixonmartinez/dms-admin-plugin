@@ -1,0 +1,8 @@
+Check for Existing Implementations
+PHP provides a number of functions to verify existence of variables, functions, 
+classes and constants. All of these will return true if the entity exists.
+
+Variables: isset() (includes arrays, objects, etc.) http://php.net/manual/en/function.isset.php
+Functions: function_exists() http://php.net/manual/en/function.function-exists.php
+Classes: class_exists() http://php.net/manual/en/function.class-exists.php
+Constants: defined() http://php.net/manual/en/function.defined.php
