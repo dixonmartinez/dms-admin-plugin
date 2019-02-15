@@ -1,15 +1,15 @@
 <?php
 /**
- * DMS Admin Plugin
+ * DMS Admin
  * 
- * @package DMS_Admin_Plugin
+ * @package DMS_Admin
  * @author Dixon Martinez <dixonalvarezm@gmail.com>
  * @license GPL-2.0+
  * @link https://github.com/dixonmartinez/dms-admin-plugin
  * @copyright 2019 Dixon Martinez
  * 
  * @wordpress-plugin
- * Plugin Name: 		DMS Admin Plugin
+ * Plugin Name: 		DMS Admin
  * Plugin Uri: 			https://github.com/dixonmartinez/dms-admin-plugin
  * Description: 		This plugin
  * Version: 			0.0.0
@@ -36,50 +36,35 @@
  */
 
 //	If this file is called directly, abort
-if ( ! defined( 'WPINC' )) {
+if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
-// register_activation_hook ( __FILE__, 'dms_active_function' );
-// register_deactivation_hook ( __FILE__, 'dms_deactive_function' );
+/**
+ * Currently plugin version
+ * 
+ */
+if ( ! defined( 'DMS_ADMIN_VERSION' ) ) {
+	define( 'DMS_ADMIN_VERSION', '0.0.0' );
+}
 
-//	Create function dms_active_function if it doesn't exist
-if ( ! function_exists( 'dms_active_function' ) ) {
+if ( ! function_exists( 'activate_dms_admin' ) ) {
 	/**
-	 * Activate Function
+	 * The code that runs during plugin activation.
 	 */
-	function dms_active_function() {
-		echo 'Plugins Function Activate';
-	}
+	function activate_dms_admin() {
+		require_once plugin_dir_path( __FILE__ ) . 'includes/class-dms-admin-activator.php';
+		DMS_Admin_Activator::activate();
+	};
 }
 
-//	Create function dms_deactive_funtion if it doesn't exist
-if ( ! function_exists( 'dms_deactive_funtion' ) ) {
-	function dms_deactive_funtion() {
-		echo 'Plugins Function Deactivate';
-	}
+if ( ! function_exists( 'deactivate_dms_admin' ) ) {
+	function deactivate_dms_admin() {
+		require_once plugin_dir_path( __FILE__ ) . 'includes/class-dms-admin-deactivator.php';
+		DMS_Admin_Deactivator::deactivate();
+	};
 }
 
-function pluginprefix_setup_post_type() {
-	// register the "book" custom post type
-	register_post_type ( 'book', [ 
-			'public' => 'true'
-	] );
-}
-add_action ( 'init', 'pluginprefix_setup_post_type' );
-function pluginprefix_install() {
-	// trigger our function that registers the custom post type
-	pluginprefix_setup_post_type ();
+register_activation_hook( __FILE__, 'activate_dms_admin' );
+register_deactivation_hook( __FILE__, 'deactivate_dms_admin' );
 
-	// clear the permalinks after the post type has been registered
-	flush_rewrite_rules ();
-}
-register_activation_hook ( __FILE__, 'pluginprefix_install' );
-
-function pluginprefix_deactivation() {
-	// unregister the post type, so the rules are no longer in memory
-	unregister_post_type( 'book' );
-	// clear the permalinks to remove our post type's rules from the database
-	flush_rewrite_rules();
-}
-register_deactivation_hook( __FILE__, 'pluginprefix_deactivation' );
